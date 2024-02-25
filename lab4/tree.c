@@ -45,9 +45,51 @@ void tree_free(Tree *tree) {
 
 void pop_minimum(Tree *tree, int *min, Tree **new_tree) { 
   /* TODO */
+  Tree * root;
+  Tree * tmp;
+  while (tree -> left != NULL)
+  {
+    tmp = tree;
+    tree = tree -> left;
+  }
+  min = &(tree -> value);
+  tmp -> left = NULL;
+  new_tree = &root;
 }
 
-Tree *tree_remove(int x, Tree *tree) { 
-  /* TODO */
-  return empty;
+Tree *tree_remove(int x, Tree *tree) {
+    /* TODO */
+    if (tree == NULL) {
+        return tree;
+    }
+
+    if (x < tree->value) {
+        tree->left = tree_remove(x, tree->left);
+    }
+    else if (x > tree->value) {
+        tree->right = tree_remove(x, tree->right);
+    }
+    // Else: x == tree -> value: delete node.
+    else {
+        // Node with only one child or no child
+        if (tree->left == NULL) {
+            Tree *tmp = tree->right;
+            free(tree);
+            return tmp;
+        } else if (tree->right == NULL) {
+            Tree *tmp = tree->left;
+            free(tree);
+            return tmp;
+        }
+
+        // Node with two children: Use pop_minimum to get the inorder successor
+        int minVal;
+        Tree *newRightSubtree;
+        pop_minimum(tree->right, &minVal, &newRightSubtree);
+
+        // Copy the inorder successor's content to this node and delete the inorder successor
+        tree->value = minVal;
+        tree->right = newRightSubtree;
+    }
+    return tree;
 }
