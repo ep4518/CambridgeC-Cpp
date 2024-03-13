@@ -21,7 +21,7 @@ expr_t mkTimes(expr_t e1, expr_t e2) {
   expr_t e = malloc(sizeof(struct expr));
   e->type = TIMES;
   e->data.args.fst = e1;
-  e->data.args.fst = e2;
+  e->data.args.snd = e2;
   return e;
 }
 
@@ -30,7 +30,13 @@ void free_expr(expr_t e) {
     switch (e->type) { 
     case LIT:
       free(e);
-    case PLUS:
+      break;
+    case PLUS: {
+      free_expr(e->data.args.fst);
+      free_expr(e->data.args.snd);
+      free(e);
+      break;
+    }
     case TIMES: {
       free_expr(e->data.args.fst);
       free_expr(e->data.args.snd);

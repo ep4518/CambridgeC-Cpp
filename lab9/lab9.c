@@ -10,9 +10,11 @@ int main(int argc, char **argv) {
     if (i == -1) 
       printf("parse error\n");
     else 
+    {
       print_expr(e);
       printf(" = %d\n", eval_expr(e));
       free_expr(e);
+    }
   } else { 
     printf("Expected 1 argument\n");
   }
